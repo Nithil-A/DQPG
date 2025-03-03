@@ -1,4 +1,11 @@
-<?php include 'header.php';?>
+<?php
+session_start();
+if (isset($_SESSION['user_id'])) {
+    header("Location: index.php");
+    exit();
+}
+include 'header.php';
+?>
 <html>
     <head>
         <title>Login Here!!</title>
@@ -78,20 +85,24 @@
             }
         </style>
         <script type="text/javascript">
-          function validateLogin()
-          {
-              var uname=document.forms[login][uname].value;
-              if(email==null || password=='')
-              {
-                  alert("Enter Username ");
-                  return false;
-              }
-          }
+           function validateLogin() {
+            var email = document.forms["login"]["email"].value;
+            var password = document.forms["login"]["password"].value;
+
+            if (email.trim() === "" || password.trim() === "") {
+                alert("Please enter both Email and Password.");
+                return false;
+            }
+            return true;
+        }
         </script>
     </head>
 	<div class="bottom">
 	    <h1>LOGIN HERE!</h1>    
         <div class="box">
+        <?php if (isset($_GET['error'])) { ?>
+                <p style="color:red;"><?php echo htmlspecialchars($_GET['error']); ?></p>
+            <?php } ?>
             <form name="login" action="login_process.php" method="post" class="form" onsubmit="return validateLogin()">
                 <input type="text" name="email" placeholder="Email"><br>
                 <input type="password" name="password" placeholder="Password"><br>
